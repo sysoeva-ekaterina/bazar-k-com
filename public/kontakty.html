@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Контакты — BAZA-R-COM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Tektur:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="kontakty">
+<div id="header"></div>
+<main class="wrap doc"><div class="inner">
+<h1>Контакты</h1>
+<p class="lead">Поможем подобрать деталь под ваш двигатель и модель. Пишите — ответим.</p>
+<div class="req"><dl>
+  <dt>Продажи и заказы</dt><dd data-s="phone"></dd>
+  <dt>Рустем — опт, жалобы, предложения, партнёрство</dt><dd data-s="phone2"></dd>
+  <dt>Telegram</dt><dd data-s="telegram"></dd>
+  <dt>Почта</dt><dd data-s="email"></dd>
+  <dt>Город</dt><dd data-s="city"></dd>
+  <dt>Часы работы</dt><dd data-s="hours"></dd>
+</dl></div>
+<p>Мы на Авито: <a data-render="renderAvito" href="#" target="_blank" rel="noopener"></a></p>
+<h2>Реквизиты</h2>
+<div class="req"><dl>
+  <dt>Продавец</dt><dd data-s="seller.fullName"></dd>
+  <dt>ИНН</dt><dd data-s="seller.inn"></dd>
+  <dt>ОГРНИП</dt><dd data-s="seller.ogrn"></dd>
+  <dt>Адрес</dt><dd data-s="seller.address"></dd>
+  <dt>Телефон</dt><dd data-s="phone"></dd>
+  <dt>Почта</dt><dd data-s="email"></dd>
+</dl></div>
+</div></main>
+<div id="footer"></div>
+<script>
+window.renderAvito = (s) => "профиль продавца";
+document.addEventListener("DOMContentLoaded", () => SHOP.store.then((s) => { const a = document.querySelector("[data-render=renderAvito]"); if (a) a.href = s.avito; }));
+</script>
+<script src="common.js"></script>
+</body>
+</html>

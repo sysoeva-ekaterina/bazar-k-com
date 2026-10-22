@@ -1,0 +1,9 @@
+{
+  "name": "baza-r-com",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Интернет-магазин BAZA-R-COM: каталог, корзина, оплата Т-Банк, заказы в Telegram",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

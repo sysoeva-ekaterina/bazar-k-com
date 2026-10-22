@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Доставка и оплата — BAZA-R-COM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Tektur:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="dostavka-i-oplata">
+<div id="header"></div>
+<main class="wrap doc"><div class="inner">
+<h1>Доставка и оплата</h1>
+<p class="lead">Отправляем по России за <span data-s="delivery.shipWithin"></span>. Доставка: <span data-s="delivery.regions"></span>.</p>
+
+<h2>Как оплатить</h2>
+<ul data-render="renderPayMethods"></ul>
+<p>Оплата проходит на защищённой странице банка-партнёра — <span data-s="payment.processor"></span>. Данные карты вводятся только на странице банка, сайт их не видит и не хранит. Для подтверждения платежа банк может запросить код 3-D Secure.</p>
+<p data-s="payment.receipt"></p>
+
+<h2>Способы доставки</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Способ</th><th>Срок</th><th>Стоимость</th></tr></thead>
+  <tbody data-render="renderDelivery"></tbody>
+</table></div>
+<p>Стоимость доставки не входит в цену товара. Её рассчитаем по тарифу СДЭК и сообщим вам после оформления заказа. Отправляем из города: <span data-s="city"></span>.</p>
+<p>Самовывоза нет: отправляем только СДЭКом. Оплата только онлайн, наложенным платежом не отправляем.</p>
+
+<h2>Как проходит заказ</h2>
+<ol>
+  <li>Добавьте детали в корзину и оформите заказ: имя, телефон, почта для чека и адрес.</li>
+  <li>Оплатите картой или по СБП на странице банка.</li>
+  <li>Мы свяжемся с вами, уточним доставку и отправим посылку. Трек-номер пришлём в мессенджер.</li>
+</ol>
+<p>Сомневаетесь, подойдёт ли деталь? Напишите модель мотоцикла и двигатель — подберём. Telegram: <span data-s="telegram"></span>, телефон: <span data-s="phone"></span>.</p>
+</div></main>
+<div id="footer"></div>
+<script>
+window.renderPayMethods = (s) => s.payment.methods.map((m) => `<li>${SHOP.esc(m)}</li>`).join("");
+window.renderDelivery = (s) => s.delivery.options.map((o) => `<tr><td>${SHOP.val(o.name)}</td><td>${SHOP.val(o.time)}</td><td>${SHOP.val(o.price)}</td></tr>`).join("");
+</script>
+<script src="common.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BAZA-R-COM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="BAZA-R-COM — запчасти и тюнинг для китайских эндуро: карбюраторы, сцепление, обгонные муфты, цепи, траверсы, сиденья. Доставка по России, оплата картой и СБП.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Tektur:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="index">
+<div id="header"></div>
+
+<main>
+  <section class="wrap hero">
+    <div>
+      <h1>Запчасти для китайских эндуро, <em>которые ставим себе</em></h1>
+      <p>Усиленное сцепление, обгонные муфты, карбюраторы, цепи и траверсы. Всё проверено на наших мотоциклах. Отправляем по России, оплата картой или по СБП.</p>
+    </div>
+    <div class="engine-pick">
+      <label class="label" for="q">Подбор по двигателю или модели</label>
+      <input id="q" type="search" placeholder="Например, 172FMM, NB300, MT250" autocomplete="off">
+      <div class="chips" id="chips" aria-label="Популярные двигатели и модели"></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="catalog" aria-label="Каталог">
+    <div class="toolbar" id="cats" role="group" aria-label="Категории"></div>
+    <div class="grid" id="grid"></div>
+    <div class="facts" id="facts"></div>
+  </section>
+</main>
+
+<!-- Карточка товара -->
+<dialog id="pd" aria-label="Товар">
+  <button class="close" type="button" id="pdClose" aria-label="Закрыть">×</button>
+  <div class="pd">
+    <div class="pd-gallery">
+      <img class="pd-main" id="pdMain" alt="">
+      <div class="thumbs" id="pdThumbs"></div>
+    </div>
+    <div class="pd-info" id="pdInfo"></div>
+  </div>
+</dialog>
+
+<!-- Корзина и оформление -->
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Корзина" aria-hidden="true">
+  <div class="drawer-head">
+    <h2 id="drawerTitle">Корзина</h2>
+    <button class="close" style="position:static" type="button" id="cartClose" aria-label="Закрыть корзину">×</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div id="footer"></div>
+<script src="common.js"></script>
+<script src="shop.js"></script>
+</body>
+</html>
