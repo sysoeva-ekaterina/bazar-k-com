@@ -15,22 +15,45 @@
 <div id="header"></div>
 
 <main>
-  <section class="wrap hero">
-    <div>
-      <h1>Запчасти для китайских эндуро, <em>которые ставим себе</em></h1>
-      <p>Усиленное сцепление, обгонные муфты, карбюраторы, цепи и траверсы. Всё проверено на наших мотоциклах. Отправляем по России, оплата картой или по СБП.</p>
-    </div>
-    <div class="engine-pick">
-      <label class="label" for="q">Подбор по двигателю или модели</label>
-      <input id="q" type="search" placeholder="Например, 172FMM, NB300, MT250" autocomplete="off">
-      <div class="chips" id="chips" aria-label="Популярные двигатели и модели"></div>
+  <!-- Баннеры: слайды задаются в store.json → "banners" -->
+  <section class="wrap" aria-label="Баннеры">
+    <div class="slider" id="slider" aria-roledescription="карусель">
+      <div class="slides" id="slides"></div>
+      <button class="sl-arrow prev" type="button" id="slPrev" aria-label="Предыдущий слайд">‹</button>
+      <button class="sl-arrow next" type="button" id="slNext" aria-label="Следующий слайд">›</button>
+      <div class="sl-dots" id="slDots" role="group" aria-label="Слайды"></div>
     </div>
   </section>
 
+  <!-- Преимущества -->
+  <section class="wrap" aria-label="Почему мы">
+    <div class="facts" id="facts"></div>
+  </section>
+
+  <!-- Лидеры продаж: товары с "hit": true в products.json (блок скрыт, если таких нет) -->
+  <section class="wrap shelf" id="hitsSec" hidden>
+    <h2 class="sec-title">Лидеры продаж</h2>
+    <div class="grid" id="hits"></div>
+  </section>
+
+  <!-- Каталог -->
   <section class="wrap" id="catalog" aria-label="Каталог">
+    <div class="cat-head">
+      <h2 class="sec-title">Каталог</h2>
+      <div class="engine-pick" id="pick">
+        <label class="label" for="q">Подбор по двигателю или модели</label>
+        <input id="q" type="search" placeholder="Например, 172FMM, NB300, MT250" autocomplete="off">
+        <div class="chips" id="chips" aria-label="Популярные двигатели и модели"></div>
+      </div>
+    </div>
     <div class="toolbar" id="cats" role="group" aria-label="Категории"></div>
     <div class="grid" id="grid"></div>
-    <div class="facts" id="facts"></div>
+  </section>
+
+  <!-- Новое поступление: товары с "new": true в products.json (блок скрыт, если таких нет) -->
+  <section class="wrap shelf" id="newSec" hidden>
+    <h2 class="sec-title">Новое поступление</h2>
+    <div class="grid" id="news"></div>
   </section>
 </main>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Контакты — BAZA-R-COM</title>
+<title>Реквизиты и контакты — BAZA-R-COM</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,30 +13,54 @@
 <body data-page="kontakty">
 <div id="header"></div>
 <main class="wrap doc"><div class="inner">
-<h1>Контакты</h1>
+<nav class="doc-nav" id="docnav" aria-label="Документы"></nav>
+<h1>Реквизиты и контакты</h1>
 <p class="lead">Поможем подобрать деталь под ваш двигатель и модель. Пишите — ответим.</p>
+<h2>Контакты</h2>
 <div class="req"><dl>
-  <dt>Продажи и заказы</dt><dd data-s="phone"></dd>
-  <dt>Рустем — опт, жалобы, предложения, партнёрство</dt><dd data-s="phone2"></dd>
-  <dt>Telegram</dt><dd data-s="telegram"></dd>
-  <dt>Почта</dt><dd data-s="email"></dd>
-  <dt>Город</dt><dd data-s="city"></dd>
-  <dt>Часы работы</dt><dd data-s="hours"></dd>
+<dt>Продажи и заказы</dt><dd data-s="phone"></dd>
+<dt>Рустем — опт, жалобы, предложения, партнёрство</dt><dd data-s="phone2"></dd>
+<dt>Telegram</dt><dd data-s="telegram"></dd>
+<dt>E-mail для обращений</dt><dd data-s="email"></dd>
+<dt>E-mail по вопросам персональных данных</dt><dd data-s="seller.privacyEmail"></dd>
+<dt>Часы работы</dt><dd data-s="hours"></dd>
+<dt>Авито</dt><dd><a data-render="renderAvito" href="#" target="_blank" rel="noopener"></a></dd>
 </dl></div>
-<p>Мы на Авито: <a data-render="renderAvito" href="#" target="_blank" rel="noopener"></a></p>
-<h2>Реквизиты</h2>
+
+<h2>Сведения о продавце</h2>
 <div class="req"><dl>
-  <dt>Продавец</dt><dd data-s="seller.fullName"></dd>
-  <dt>ИНН</dt><dd data-s="seller.inn"></dd>
-  <dt>ОГРНИП</dt><dd data-s="seller.ogrn"></dd>
-  <dt>Адрес</dt><dd data-s="seller.address"></dd>
-  <dt>Телефон</dt><dd data-s="phone"></dd>
-  <dt>Почта</dt><dd data-s="email"></dd>
+<dt>Полное наименование</dt><dd data-s="seller.fullName"></dd>
+<dt>Сокращённое наименование</dt><dd data-s="seller.shortName"></dd>
+<dt>Бренд</dt><dd data-s="name"></dd>
+<dt>ОГРНИП</dt><dd data-s="seller.ogrn"></dd>
+<dt>ИНН</dt><dd data-s="seller.inn"></dd>
+<dt>ОКПО / ОКАТО / ОКТМО</dt><dd><span data-s="seller.okpo"></span> / <span data-s="seller.okato"></span> / <span data-s="seller.oktmo"></span></dd>
+<dt>Юридический адрес</dt><dd data-s="seller.address"></dd>
+<dt>Почтовый адрес, адрес для претензий и возвратов</dt><dd data-s="seller.postAddress"></dd>
+<dt>Регистрационный номер в реестре операторов ПДн</dt><dd data-s="seller.rknNumber"></dd>
 </dl></div>
+
+<h2>Банковские реквизиты</h2>
+<div class="req"><dl>
+<dt>Расчётный счёт</dt><dd data-s="seller.bank.account"></dd>
+<dt>Банк</dt><dd data-s="seller.bank.name"></dd>
+<dt>БИК</dt><dd data-s="seller.bank.bik"></dd>
+<dt>Корреспондентский счёт</dt><dd data-s="seller.bank.corrAccount"></dd>
+</dl></div>
+
+<h2>Как направить претензию</h2>
+<p>Письменную претензию можно направить почтой по адресу <span data-s="seller.postAddress"></span> или на электронную почту <span data-s="email"></span>. Укажите номер заказа, суть требования и контакт для ответа. Мы отвечаем в течение 10 дней.</p>
+
+<h2>Документы о соответствии товаров</h2>
+<p>Сведения о сертификате или декларации о соответствии (либо о том, что товар не подлежит обязательному подтверждению соответствия) указаны в карточке каждого товара.</p>
+
+<h2>Документы</h2>
+<ul data-render="renderDocList"></ul>
 </div></main>
 <div id="footer"></div>
 <script>
 window.renderAvito = (s) => "профиль продавца";
+window.renderDocList = () => SHOP.DOCS.map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join("");
 document.addEventListener("DOMContentLoaded", () => SHOP.store.then((s) => { const a = document.querySelector("[data-render=renderAvito]"); if (a) a.href = s.avito; }));
 </script>
 <script src="common.js"></script>

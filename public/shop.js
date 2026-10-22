@@ -60,6 +60,57 @@
     const found = document.querySelector(".found"); if (found) found.textContent = `${list.length} из ${products.length}`;
   }
 
+  // Полки «Лидеры продаж» и «Новое поступление»: товары с "hit": true / "new": true
+  function renderShelves() {
+    [["hit", "hits", "hitsSec"], ["new", "news", "newSec"]].forEach(([flag, grid, sec]) => {
+      const list = products.filter((p) => p[flag]).slice(0, 8);
+      $(sec).hidden = !list.length;
+      $(grid).innerHTML = list.map(card).join("");
+    });
+  }
+
+  // ---------- баннер-карусель ----------
+  function initSlider(banners) {
+    const root = $("slider");
+    if (!banners || !banners.length) { root.closest("section").hidden = true; return; }
+    $("slides").innerHTML = banners.map((b, i) => `
+      <div class="slide" role="group" aria-roledescription="слайд" aria-label="${i + 1} из ${banners.length}" ${i ? 'aria-hidden="true"' : ""}>
+        <img src="${esc(b.img)}" alt="" ${i ? 'loading="lazy"' : 'fetchpriority="high"'}>
+        <div class="slide-text">
+          <${i ? "h2" : "h1"} class="slide-title">${esc(b.title)}</${i ? "h2" : "h1"}>
+          ${b.text ? `<p>${esc(b.text)}</p>` : ""}
+          ${b.button ? `<a class="btn" href="${esc(b.link || "#catalog")}" ${i ? 'tabindex="-1"' : ""}>${esc(b.button)}</a>` : ""}
+        </div>
+      </div>`).join("");
+    const many = banners.length > 1;
+    $("slPrev").hidden = $("slNext").hidden = !many;
+    $("slDots").innerHTML = many ? banners.map((_, i) => `<button type="button" data-dot="${i}" aria-label="Слайд ${i + 1}" aria-current="${i === 0}"></button>`).join("") : "";
+    let cur = 0, timer = null;
+    const slides = root.querySelectorAll(".slide");
+    function go(n) {
+      cur = (n + slides.length) % slides.length;
+      $("slides").style.transform = `translateX(-${cur * 100}%)`;
+      slides.forEach((s, i) => {
+        s.setAttribute("aria-hidden", String(i !== cur));
+        s.querySelectorAll("a").forEach((a) => (i === cur ? a.removeAttribute("tabindex") : a.setAttribute("tabindex", "-1")));
+      });
+      root.querySelectorAll("[data-dot]").forEach((d, i) => d.setAttribute("aria-current", String(i === cur)));
+    }
+    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const play = () => { stop(); if (many && !reduce) timer = setInterval(() => go(cur + 1), 6000); };
+    const stop = () => { if (timer) clearInterval(timer); timer = null; };
+    $("slPrev").onclick = () => { go(cur - 1); play(); };
+    $("slNext").onclick = () => { go(cur + 1); play(); };
+    $("slDots").onclick = (e) => { const d = e.target.closest("[data-dot]"); if (d) { go(+d.dataset.dot); play(); } };
+    root.addEventListener("mouseenter", stop); root.addEventListener("mouseleave", play);
+    root.addEventListener("focusin", stop); root.addEventListener("focusout", play);
+    // свайп на телефоне
+    let x0 = null;
+    root.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; stop(); }, { passive: true });
+    root.addEventListener("touchend", (e) => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); x0 = null; play(); });
+    play();
+  }
+
   function renderCats() {
     const cats = ["Все", ...new Set(products.map((p) => p.category))];
     $("cats").innerHTML = cats.map((c) => `<button class="cat" type="button" data-cat="${esc(c)}" aria-pressed="${c === state.cat}">${esc(c)}</button>`).join("") + `<span class="found"></span>`;
@@ -96,7 +147,9 @@
       <button class="btn wide" type="button" data-add="${p.id}" data-close="1" ${p.inStock ? "" : "disabled"}>${p.inStock ? "Добавить в корзину" : "Нет в наличии"}</button>
       ${p.description.map((t) => `<p>${esc(t)}</p>`).join("")}
       ${p.compat && p.compat.length ? `<div class="section-label">Подходит</div><div class="compat">${p.compat.map((c) => `<span>${esc(c)}</span>`).join("")}</div>` : ""}
-      ${p.specs && p.specs.length ? `<div class="section-label">Характеристики</div><table class="specs"><tbody>${p.specs.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</tbody></table>` : ""}`;
+      ${p.specs && p.specs.length ? `<div class="section-label">Характеристики</div><table class="specs"><tbody>${p.specs.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</tbody></table>` : ""}
+      <div class="section-label">Подтверждение соответствия</div>
+      <p style="font-size:14px;color:var(--muted)">${p.conformity ? (/^https?:\/\//.test(p.conformity) ? `<a href="${esc(p.conformity)}" target="_blank" rel="noopener">Сертификат / декларация</a>` : esc(p.conformity)) : val(S.conformityDefault)}</p>`;
     const dlg = $("pd");
     if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); }
   }
@@ -138,10 +191,11 @@
         <div class="field"><label for="c_delivery">Доставка</label><select id="c_delivery" name="delivery">${opts}</select></div>
         <div class="field"><label for="c_address">Город и адрес или пункт выдачи</label><input id="c_address" name="address" autocomplete="street-address" required></div>
         <div class="field"><label for="c_comment">Комментарий: модель мотоцикла, двигатель</label><textarea id="c_comment" name="comment"></textarea></div>
-        <label class="consent"><input type="checkbox" id="c_ok" name="consent" required> <span>Принимаю условия <a href="oferta.html" target="_blank">публичной оферты</a></span></label>
-        <label class="consent"><input type="checkbox" id="c_pd" name="pd" required> <span>Даю <a href="soglasie.html" target="_blank">согласие на обработку персональных данных</a> по <a href="politika.html" target="_blank">политике конфиденциальности</a></span></label>
+        <label class="consent"><input type="checkbox" id="c_ok" name="consent" required> <span>Принимаю условия <a href="oferta.html" target="_blank">публичной оферты</a> и <a href="vozvrat.html" target="_blank">правил возврата</a></span></label>
+        <label class="consent"><input type="checkbox" id="c_pd" name="pd" required> <span>Я даю <a href="soglasie.html" target="_blank">согласие на обработку персональных данных</a> на условиях <a href="politika.html" target="_blank">Политики обработки персональных данных</a> в целях оформления, оплаты и доставки заказа и связи со мной</span></label>
         <div class="err" id="c_err" role="alert"></div>
         <button class="btn wide" type="submit" id="c_submit">Перейти к оплате ${rub(cartTotal())}</button>
+        <div class="pay-note">Нажимая кнопку, вы принимаете условия <a href="oferta.html" target="_blank">публичной оферты</a></div>
         <div class="pay-note">Оплата картой или по СБП на защищённой странице Т-Банка</div>
         <button class="btn ghost" type="button" id="backToCart">← Назад в корзину</button>
       </form>`;
@@ -223,7 +277,8 @@
     products = list.filter((p) => p.visible !== false);
     byId = Object.fromEntries(products.map((p) => [p.id, p]));
     cart = cart.filter((l) => byId[l.id]);
-    renderChips(); renderCats(); renderGrid(); renderFacts(); updateCount();
+    initSlider(s.banners);
+    renderChips(); renderCats(); renderGrid(); renderShelves(); renderFacts(); updateCount();
     if (location.hash === "#cart") openCart();
   });
 })();
