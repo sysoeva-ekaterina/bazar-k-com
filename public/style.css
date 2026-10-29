@@ -5,7 +5,7 @@
   --ink: #15191c;         /* графит */
   --muted: #5b646a;
   --line: #c9d0d4;
-  --accent: #e2591a;      /* анодированный оранжевый, как траверсы */
+  --accent: #d0202a;      /* красный акцент */
   --accent-ink: #ffffff;
   --gold: #a8841a;        /* золотая цепь — для меток «скидка» */
   --todo-bg: #fff0b3;
@@ -23,13 +23,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #111416; --surface: #1a1e21; --ink: #e6e9eb; --muted: #9aa3a9; --line: #2d3438;
-    --accent: #ff7432; --accent-ink: #160a03; --gold: #d8b14a; --todo-bg: #4a3c08; --todo-ink: #ffe28a; --ok: #4cc58a;
+    --accent: #ff4d55; --accent-ink: #1a0405; --gold: #d8b14a; --todo-bg: #4a3c08; --todo-ink: #ffe28a; --ok: #4cc58a;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #111416; --surface: #1a1e21; --ink: #e6e9eb; --muted: #9aa3a9; --line: #2d3438;
-  --accent: #ff7432; --accent-ink: #160a03; --gold: #d8b14a; --todo-bg: #4a3c08; --todo-ink: #ffe28a; --ok: #4cc58a;
+  --accent: #ff4d55; --accent-ink: #1a0405; --gold: #d8b14a; --todo-bg: #4a3c08; --todo-ink: #ffe28a; --ok: #4cc58a;
   color-scheme: dark;
 }
 
