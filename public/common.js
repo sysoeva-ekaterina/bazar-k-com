@@ -1,4 +1,4 @@
-// Общая часть всех страниц: верхняя полоса с контактами, шапка, подвал, cookie-баннер
+// Общая часть всех страниц: верхняя полоса с контактами, шапка, подвал, cookie-баннер, окно с акцией
 // и подстановка данных магазина из store.json.
 // Всё, что нужно поменять (телефон, реквизиты, доставка, баннеры), меняется в store.json — не здесь.
 (function () {
@@ -143,6 +143,34 @@
   }
   document.addEventListener("click", (e) => { if (e.target.closest("[data-cookie-settings]")) cookieBanner(true); });
 
+  // ---------- всплывающее окно с акцией ----------
+  // Настраивается в store.json → popup. Показывается на главной с from по to (даты по Москве)
+  // один раз каждому посетителю; чтобы показать заново всем — поменять popup.id.
+  function promo(p, page) {
+    if (!p || !p.show || page !== "index") return;
+    const today = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Moscow" });
+    if ((p.from && today < p.from) || (p.to && today > p.to)) return;
+    const key = "popupSeen:" + (p.id || p.title);
+    try { if (localStorage.getItem(key)) return; } catch (e) {}
+    const d = document.createElement("dialog");
+    d.className = "promo"; d.setAttribute("aria-label", p.title || "Акция");
+    d.innerHTML = `
+      <button class="close" type="button" data-promo-close aria-label="Закрыть">×</button>
+      <div class="promo-body">
+        <h2>${val(p.title)}</h2>
+        ${p.text ? `<p>${val(p.text)}</p>` : ""}
+        <button class="btn" type="button" data-promo-close>${val(p.button || "Понятно")}</button>
+      </div>`;
+    const close = () => {
+      try { localStorage.setItem(key, "1"); } catch (e) {}
+      if (d.close) d.close(); d.remove();
+    };
+    d.addEventListener("click", (e) => { if (e.target === d || e.target.closest("[data-promo-close]")) close(); });
+    d.addEventListener("cancel", (e) => { e.preventDefault(); close(); });
+    document.body.appendChild(d);
+    setTimeout(() => { if (d.showModal) d.showModal(); else d.setAttribute("open", ""); }, 800);
+  }
+
   // Подставляет поля store.json в элементы с атрибутом data-s="путь.к.полю"
   function fill(s, root) {
     root.querySelectorAll("[data-s]").forEach((el) => { el.innerHTML = val(get(s, el.dataset.s)); });
@@ -162,6 +190,7 @@
         const fn = window[el.dataset.render]; if (typeof fn === "function") el.innerHTML = fn(s);
       });
       cookieBanner(!readConsent());
+      promo(s.popup, page);
       return s;
     }),
   };
